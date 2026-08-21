@@ -1,0 +1,1592 @@
+<title>TripLane Interview Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+
+<style>
+  /* ---- tokens: complete light palette on bare :root ---------------------- */
+  :root {
+    --ground: #F1F5F7;
+    --surface: #FFFFFF;
+    --surface-2: #E7EEF1;
+    --ink: #0C1A22;
+    --ink-2: #24404F;
+    --muted: #566B78;
+    --rule: #D3DEE4;
+    --rule-strong: #B3C4CD;
+    --accent: #0B6E8A;
+    --accent-ink: #075063;
+    --accent-soft: #DFEFF4;
+    --signal: #9A560C;
+    --signal-soft: #FAEEDC;
+    --good: #1C6B4C;
+    --good-soft: #DDF0E7;
+    --shadow: 0 1px 2px rgba(12, 26, 34, .05), 0 10px 28px -18px rgba(12, 26, 34, .35);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #08131A;
+      --surface: #0F1F29;
+      --surface-2: #162B37;
+      --ink: #E3EDF2;
+      --ink-2: #B7CCD7;
+      --muted: #8BA3B1;
+      --rule: #21394A;
+      --rule-strong: #33556B;
+      --accent: #46B4D4;
+      --accent-ink: #8AD3EA;
+      --accent-soft: #10303D;
+      --signal: #E2A75C;
+      --signal-soft: #2B2113;
+      --good: #64C89E;
+      --good-soft: #122C24;
+      --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 12px 30px -18px rgba(0, 0, 0, .8);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --ground: #08131A;
+    --surface: #0F1F29;
+    --surface-2: #162B37;
+    --ink: #E3EDF2;
+    --ink-2: #B7CCD7;
+    --muted: #8BA3B1;
+    --rule: #21394A;
+    --rule-strong: #33556B;
+    --accent: #46B4D4;
+    --accent-ink: #8AD3EA;
+    --accent-soft: #10303D;
+    --signal: #E2A75C;
+    --signal-soft: #2B2113;
+    --good: #64C89E;
+    --good-soft: #122C24;
+    --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 12px 30px -18px rgba(0, 0, 0, .8);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font: 400 16px/1.65 "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+  /* ---- masthead ---------------------------------------------------------- */
+  .masthead {
+    border-bottom: 1px solid var(--rule);
+    background: var(--surface);
+  }
+  .masthead-inner {
+    max-width: 1180px; margin: 0 auto; padding: 40px 28px 30px;
+  }
+  .stripe { display: flex; height: 5px; }
+  .stripe span { flex: 1; }
+  .eyebrow {
+    font: 600 11px/1 "IBM Plex Mono", ui-monospace, monospace;
+    letter-spacing: .16em; text-transform: uppercase; color: var(--muted);
+  }
+  h1 {
+    font: 700 clamp(32px, 5vw, 52px)/1.04 "Archivo", ui-sans-serif, sans-serif;
+    letter-spacing: -.022em; margin: 14px 0 0; text-wrap: balance;
+  }
+  .lede { color: var(--ink-2); max-width: 62ch; margin: 14px 0 0; font-size: 17px; }
+
+  .ticket {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1px; margin-top: 28px;
+    background: var(--rule); border: 1px solid var(--rule); border-radius: 10px; overflow: hidden;
+  }
+  .ticket div { background: var(--surface); padding: 12px 14px; }
+  .ticket dt {
+    font: 600 10px/1 "IBM Plex Mono", monospace; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--muted);
+  }
+  .ticket dd {
+    margin: 7px 0 0; font: 500 14px/1.3 "IBM Plex Sans", sans-serif;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ---- shell ------------------------------------------------------------- */
+  .shell { max-width: 1180px; margin: 0 auto; padding: 0 28px 90px; display: block; }
+  @media (min-width: 1060px) {
+    .shell { display: grid; grid-template-columns: 232px minmax(0, 1fr); gap: 52px; align-items: start; }
+  }
+
+  nav.toc {
+    position: sticky; top: 0; align-self: start; padding: 34px 0 20px;
+    max-height: 100vh; overflow-y: auto;
+  }
+  nav.toc p {
+    font: 600 10px/1 "IBM Plex Mono", monospace; letter-spacing: .14em;
+    text-transform: uppercase; color: var(--muted); margin: 0 0 12px;
+  }
+  nav.toc ol { list-style: none; margin: 0 0 22px; padding: 0; display: flex; flex-direction: column; gap: 1px; }
+  nav.toc a {
+    display: flex; gap: 9px; padding: 5px 8px; border-radius: 6px;
+    color: var(--ink-2); text-decoration: none; font-size: 13.5px; line-height: 1.35;
+  }
+  nav.toc a:hover { background: var(--accent-soft); color: var(--accent-ink); }
+  nav.toc a b { font: 500 11px/1.5 "IBM Plex Mono", monospace; color: var(--muted); }
+  @media (max-width: 1059px) { nav.toc { position: static; max-height: none; } }
+
+  main { padding-top: 34px; min-width: 0; }
+
+  /* ---- sections ---------------------------------------------------------- */
+  .part {
+    margin: 54px 0 30px; padding-top: 26px; border-top: 2px solid var(--ink);
+  }
+  .part:first-of-type { margin-top: 8px; }
+  .part h2 {
+    font: 700 clamp(21px, 3vw, 27px)/1.15 "Archivo", sans-serif;
+    letter-spacing: -.014em; margin: 8px 0 0;
+  }
+  .part p { color: var(--ink-2); margin: 10px 0 0; max-width: 68ch; }
+
+  section { scroll-margin-top: 16px; padding-top: 30px; }
+  section > h3 {
+    font: 600 19px/1.25 "Archivo", sans-serif; letter-spacing: -.008em;
+    margin: 6px 0 0; color: var(--ink);
+  }
+  section > p { color: var(--ink-2); margin: 10px 0 0; max-width: 68ch; }
+  .sec-no {
+    font: 600 11px/1 "IBM Plex Mono", monospace; letter-spacing: .14em;
+    text-transform: uppercase; color: var(--accent);
+  }
+
+  h4 {
+    font: 600 14px/1.3 "IBM Plex Sans", sans-serif; margin: 26px 0 0;
+    color: var(--ink);
+  }
+
+  a { color: var(--accent-ink); }
+
+  /* ---- Q&A --------------------------------------------------------------- */
+  .qa { margin-top: 20px; display: flex; flex-direction: column; gap: 14px; }
+  .q {
+    background: var(--surface); border: 1px solid var(--rule);
+    border-radius: 10px; overflow: hidden; box-shadow: var(--shadow);
+  }
+  .q > summary {
+    display: flex; gap: 12px; align-items: baseline; cursor: pointer;
+    padding: 13px 16px; background: var(--ink); color: #F2F7F9;
+    font: 500 15px/1.4 "IBM Plex Sans", sans-serif; list-style: none;
+  }
+  .q > summary::-webkit-details-marker { display: none; }
+  .q > summary::after {
+    content: "+"; margin-left: auto; font: 400 17px/1 "IBM Plex Mono", monospace;
+    opacity: .65; flex: none;
+  }
+  .q[open] > summary::after { content: "−"; }
+  .q > summary b {
+    font: 600 11px/1.55 "IBM Plex Mono", monospace; letter-spacing: .1em;
+    color: #7FCBE2; flex: none;
+  }
+  .q .a { padding: 16px; border-top: 1px solid var(--rule); }
+  .q .a > *:first-child { margin-top: 0; }
+  .q .a p { margin: 11px 0 0; max-width: 70ch; }
+  .q .a ul { margin: 11px 0 0; padding-left: 20px; }
+  .q .a li { margin: 5px 0; max-width: 68ch; }
+  .q .a li::marker { color: var(--muted); }
+
+  .where {
+    margin-top: 14px; padding-top: 11px; border-top: 1px dashed var(--rule);
+    display: flex; flex-wrap: wrap; gap: 6px; align-items: baseline;
+  }
+  .where span {
+    font: 600 9.5px/1.6 "IBM Plex Mono", monospace; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--muted); margin-right: 3px;
+  }
+  .where code {
+    font: 400 12px/1.5 "IBM Plex Mono", monospace;
+    background: var(--accent-soft); color: var(--accent-ink);
+    padding: 2px 7px; border-radius: 5px; word-break: break-all;
+  }
+
+  code {
+    font: 400 .88em/1.5 "IBM Plex Mono", ui-monospace, monospace;
+    background: var(--surface-2); padding: 1.5px 5px; border-radius: 4px;
+  }
+  .q > summary code { background: rgba(255,255,255,.14); color: #E8F4F8; }
+
+  /* ---- tables ------------------------------------------------------------ */
+  .scroll { overflow-x: auto; margin-top: 18px; border: 1px solid var(--rule); border-radius: 10px; background: var(--surface); }
+  table { border-collapse: collapse; width: 100%; min-width: 660px; font-size: 13.5px; }
+  th, td { text-align: left; padding: 9px 13px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+  thead th {
+    font: 600 10px/1.4 "IBM Plex Mono", monospace; letter-spacing: .11em;
+    text-transform: uppercase; color: var(--muted); background: var(--surface-2);
+    position: sticky; top: 0;
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  td code, th code { background: none; padding: 0; font-size: 12.5px; }
+  .verb {
+    font: 600 11px/1.5 "IBM Plex Mono", monospace; letter-spacing: .04em;
+    padding: 1px 6px; border-radius: 4px; white-space: nowrap;
+    background: var(--surface-2); color: var(--ink-2);
+  }
+  .verb.get { background: var(--accent-soft); color: var(--accent-ink); }
+  .verb.post { background: var(--good-soft); color: var(--good); }
+  .verb.patch { background: var(--signal-soft); color: var(--signal); }
+  .verb.del { background: var(--signal-soft); color: var(--signal); }
+  .who { font-size: 12.5px; color: var(--muted); white-space: nowrap; }
+
+  /* ---- callouts ---------------------------------------------------------- */
+  .note {
+    margin-top: 18px; padding: 14px 16px; border-radius: 10px;
+    background: var(--surface); border: 1px solid var(--rule);
+    border-left: 3px solid var(--accent);
+  }
+  .note.warn { border-left-color: var(--signal); background: var(--signal-soft); }
+  .note h5 {
+    margin: 0; font: 600 11px/1.4 "IBM Plex Mono", monospace;
+    letter-spacing: .11em; text-transform: uppercase; color: var(--muted);
+  }
+  .note p { margin: 8px 0 0; max-width: 68ch; }
+  .note.warn p { color: var(--ink); }
+
+  pre {
+    margin: 14px 0 0; padding: 13px 15px; border-radius: 9px; overflow-x: auto;
+    background: var(--surface-2); border: 1px solid var(--rule);
+    font: 400 12.5px/1.62 "IBM Plex Mono", monospace;
+  }
+  pre code { background: none; padding: 0; font-size: inherit; }
+
+  /* ---- figures ----------------------------------------------------------- */
+  figure {
+    margin: 22px 0 0; padding: 18px; border: 1px solid var(--rule);
+    border-radius: 10px; background: var(--surface); overflow-x: auto;
+  }
+  figure svg { display: block; max-width: 100%; height: auto; margin: 0 auto; min-width: 520px; }
+  figcaption {
+    margin-top: 13px; padding-top: 11px; border-top: 1px solid var(--rule);
+    font-size: 12.5px; color: var(--muted); text-align: center;
+  }
+
+  .d-band { fill: var(--surface-2); stroke: none; }
+  .d-box { fill: var(--surface); stroke: var(--rule-strong); stroke-width: 1.4; }
+  .d-box-accent { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 1.5; }
+  .d-box-sig { fill: var(--signal-soft); stroke: var(--signal); stroke-width: 1.4; }
+  .d-t { fill: var(--ink); font: 500 12.5px "IBM Plex Sans", sans-serif; }
+  .d-t-b { fill: var(--ink); font: 600 12.5px "IBM Plex Sans", sans-serif; }
+  .d-s { fill: var(--muted); font: 400 10.5px "IBM Plex Mono", monospace; }
+  .d-e { fill: var(--muted); font: 600 9.5px "IBM Plex Mono", monospace; letter-spacing: .13em; }
+  .d-line { stroke: var(--rule-strong); stroke-width: 1.5; fill: none; }
+  .d-line-a { stroke: var(--accent); stroke-width: 1.7; fill: none; }
+  .d-line-d { stroke: var(--signal); stroke-width: 1.3; fill: none; stroke-dasharray: 5 4; }
+  .d-arrow { fill: var(--rule-strong); }
+  .d-arrow-a { fill: var(--accent); }
+  .d-arrow-d { fill: var(--signal); }
+
+  /* ---- cheat sheet ------------------------------------------------------- */
+  .grid2 { display: grid; gap: 14px; margin-top: 18px; grid-template-columns: repeat(auto-fit, minmax(268px, 1fr)); }
+  .card { background: var(--surface); border: 1px solid var(--rule); border-radius: 10px; padding: 15px 17px; }
+  .card h5 {
+    margin: 0 0 9px; font: 600 10px/1.4 "IBM Plex Mono", monospace;
+    letter-spacing: .13em; text-transform: uppercase; color: var(--accent);
+  }
+  .card ul { margin: 0; padding-left: 17px; font-size: 13.5px; }
+  .card li { margin: 5px 0; }
+  .card p { margin: 0; font-size: 13.5px; }
+
+  footer {
+    max-width: 1180px; margin: 0 auto; padding: 26px 28px 50px;
+    border-top: 1px solid var(--rule); color: var(--muted); font-size: 13px;
+  }
+
+  @media print {
+    nav.toc { display: none; }
+    .shell { display: block; max-width: none; }
+    .q { break-inside: avoid; box-shadow: none; }
+    .q > summary { background: #14252E !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .q .a { display: block !important; }
+    figure { break-inside: avoid; }
+    body { background: #fff; }
+  }
+</style>
+
+<div class="stripe" aria-hidden="true">
+  <span style="background:#0B6E8A"></span><span style="background:#1C6B4C"></span><span style="background:#9A560C"></span><span style="background:#24404F"></span>
+</div>
+
+<header class="masthead">
+  <div class="masthead-inner">
+    <p class="eyebrow">Interview preparation · Full-stack MERN project</p>
+    <h1>TripLane Interview Guide</h1>
+    <p class="lede">
+      Everything the project actually does, why each decision was made, where the code lives, and the
+      answers to the questions an interviewer will ask about it. Every file path below is real — open
+      them side by side with this page.
+    </p>
+
+    <dl class="ticket">
+      <div><dt>Stack</dt><dd>MERN + Tailwind</dd></div>
+      <div><dt>Source files</dt><dd>71 files · 5,471 lines</dd></div>
+      <div><dt>API surface</dt><dd>27 endpoints</dd></div>
+      <div><dt>Collections</dt><dd>5 (Mongo)</dd></div>
+      <div><dt>Tests run</dt><dd>118 assertions</dd></div>
+    </dl>
+  </div>
+</header>
+
+<div class="shell">
+  <nav class="toc" aria-label="Contents">
+    <p>Part I · The build</p>
+    <ol>
+      <li><a href="#s1"><b>01</b> The 60-second pitch</a></li>
+      <li><a href="#s2"><b>02</b> System architecture</a></li>
+      <li><a href="#s3"><b>03</b> Folder map</a></li>
+      <li><a href="#s4"><b>04</b> Every route, with paths</a></li>
+      <li><a href="#s5"><b>05</b> Request lifecycle</a></li>
+      <li><a href="#s6"><b>06</b> Data model &amp; indexes</a></li>
+      <li><a href="#s7"><b>07</b> Voting mechanics</a></li>
+      <li><a href="#s8"><b>08</b> Finalising &amp; ties</a></li>
+    </ol>
+    <p>Part II · Q&amp;A</p>
+    <ol>
+      <li><a href="#s9"><b>09</b> General &amp; architecture</a></li>
+      <li><a href="#s10"><b>10</b> Frontend</a></li>
+      <li><a href="#s11"><b>11</b> Backend &amp; API</a></li>
+      <li><a href="#s12"><b>12</b> Database</a></li>
+      <li><a href="#s13"><b>13</b> Security</a></li>
+      <li><a href="#s14"><b>14</b> The hard problems</a></li>
+      <li><a href="#s15"><b>15</b> Performance &amp; scale</a></li>
+      <li><a href="#s16"><b>16</b> Testing &amp; debugging</a></li>
+      <li><a href="#s17"><b>17</b> Curveballs</a></li>
+    </ol>
+    <p>Part III</p>
+    <ol>
+      <li><a href="#s18"><b>18</b> Cheat sheet</a></li>
+    </ol>
+  </nav>
+
+  <main>
+
+    <!-- ================= PART I ================= -->
+    <div class="part">
+      <p class="eyebrow">Part I</p>
+      <h2>How the thing is built</h2>
+      <p>
+        Read this part once end to end. If you can redraw the four diagrams on a whiteboard from
+        memory, you can survive almost any architecture question about this project.
+      </p>
+    </div>
+
+    <section id="s1">
+      <p class="sec-no">01</p>
+      <h3>The 60-second pitch</h3>
+      <p>
+        Learn this almost word for word. It is the answer to “tell me about your project”, and it
+        seeds the follow-up questions you <em>want</em> to be asked.
+      </p>
+
+      <div class="note">
+        <h5>Say this</h5>
+        <p>
+          “TripLane is a collaborative trip planner for groups. The problem is that planning a trip
+          in a group chat never converges — people suggest places, nobody tracks costs, and the
+          decision drifts. In TripLane one person creates a trip with a budget range, travel window
+          and currency, and shares a six-character invite code. Members join and suggest real
+          destinations, searched through the Google Places API, each with a cost estimate, dates and
+          a day-by-day activity list. Every member gets exactly one vote, which they can move but
+          never duplicate. When the organiser finalises, the winner locks in and a live countdown to
+          departure starts. Everything that happens is written to a group activity feed.”
+        </p>
+      </div>
+
+      <p>
+        Then offer the hook you are strongest on: <em>“The part I found most interesting was making
+        duplicate votes actually impossible rather than just hidden in the UI, and deciding what the
+        system should do when a vote ties.”</em> That pulls the interviewer toward
+        <a href="#s14">section 14</a>, which is your best material.
+      </p>
+    </section>
+
+    <section id="s2">
+      <p class="sec-no">02</p>
+      <h3>System architecture</h3>
+      <p>
+        Three tiers plus one external dependency. The key thing to point at: the browser never talks
+        to Google — the server does, so the API key never reaches the client.
+      </p>
+
+      <figure>
+        <svg viewBox="0 0 860 640" role="img" aria-label="Three-tier architecture: React client sends JWT-authenticated JSON to an Express API whose service layer calls Google Places and whose models read and write MongoDB.">
+          <defs>
+            <marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path class="d-arrow" d="M0 0 L10 5 L0 10 z" />
+            </marker>
+            <marker id="arwa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path class="d-arrow-a" d="M0 0 L10 5 L0 10 z" />
+            </marker>
+          </defs>
+
+          <!-- CLIENT -->
+          <rect class="d-band" x="30" y="34" width="520" height="132" rx="10" />
+          <text class="d-e" x="46" y="56">CLIENT — client/src</text>
+          <rect class="d-box" x="46" y="70" width="156" height="80" rx="8" />
+          <text class="d-t-b" x="62" y="96">React 18 SPA</text>
+          <text class="d-s" x="62" y="114">Vite dev server</text>
+          <text class="d-s" x="62" y="132">pages/ + components/</text>
+          <rect class="d-box" x="216" y="70" width="156" height="80" rx="8" />
+          <text class="d-t-b" x="232" y="96">Router + Context</text>
+          <text class="d-s" x="232" y="114">ProtectedRoute</text>
+          <text class="d-s" x="232" y="132">AuthContext</text>
+          <rect class="d-box-accent" x="386" y="70" width="148" height="80" rx="8" />
+          <text class="d-t-b" x="402" y="96">Axios client</text>
+          <text class="d-s" x="402" y="114">attaches Bearer</text>
+          <text class="d-s" x="402" y="132">handles 401</text>
+
+          <line class="d-line-a" x1="290" y1="166" x2="290" y2="212" marker-end="url(#arwa)" />
+          <text class="d-s" x="302" y="184">HTTP · JSON</text>
+          <text class="d-s" x="302" y="200">Authorization: Bearer &lt;jwt&gt;</text>
+
+          <!-- SERVER -->
+          <rect class="d-band" x="30" y="216" width="520" height="286" rx="10" />
+          <text class="d-e" x="46" y="238">EXPRESS API — server/src</text>
+
+          <rect class="d-box" x="46" y="252" width="488" height="42" rx="8" />
+          <text class="d-s" x="60" y="268">app.js — middleware chain</text>
+          <text class="d-s" x="60" y="286">helmet · CORS allow-list · 300 req/min · json 100 kb</text>
+
+          <rect class="d-box" x="46" y="308" width="488" height="38" rx="8" />
+          <text class="d-t" x="60" y="325">routes/ — path matching + express-validator</text>
+          <text class="d-s" x="60" y="340">authRoutes · groupRoutes · placesRoutes</text>
+          <line class="d-line" x1="290" y1="346" x2="290" y2="358" marker-end="url(#arw)" />
+
+          <rect class="d-box" x="46" y="360" width="488" height="38" rx="8" />
+          <text class="d-t" x="60" y="377">middleware/ — requireAuth, requireGroupMember/Owner</text>
+          <text class="d-s" x="60" y="392">authorisation happens here, not in the UI</text>
+          <line class="d-line" x1="290" y1="398" x2="290" y2="410" marker-end="url(#arw)" />
+
+          <rect class="d-box" x="46" y="412" width="488" height="38" rx="8" />
+          <text class="d-t" x="60" y="429">controllers/ — orchestrate one request</text>
+          <text class="d-s" x="60" y="444">no response shapes built by hand → utils/presenters.js</text>
+          <line class="d-line" x1="290" y1="450" x2="290" y2="462" marker-end="url(#arw)" />
+
+          <rect class="d-box-accent" x="46" y="464" width="488" height="38" rx="8" />
+          <text class="d-t" x="60" y="481">services/ — votingService · placesService · activityService</text>
+          <text class="d-s" x="60" y="496">the logic that is worth unit-testing</text>
+
+          <!-- external -->
+          <rect class="d-box-sig" x="596" y="330" width="232" height="86" rx="8" />
+          <text class="d-t-b" x="612" y="356">Google Places API (New)</text>
+          <text class="d-s" x="612" y="375">places:searchText</text>
+          <text class="d-s" x="612" y="392">photo media stream</text>
+          <text class="d-s" x="612" y="409">key lives only here-side</text>
+          <line class="d-line-a" x1="534" y1="480" x2="596" y2="405" marker-end="url(#arwa)" />
+          <text class="d-s" x="548" y="452">server-to-server</text>
+
+          <!-- DATA -->
+          <line class="d-line" x1="290" y1="502" x2="290" y2="540" marker-end="url(#arw)" />
+          <text class="d-s" x="302" y="526">Mongoose ODM</text>
+          <rect class="d-band" x="30" y="544" width="520" height="82" rx="10" />
+          <text class="d-e" x="46" y="566">DATA — MongoDB</text>
+          <rect class="d-box" x="46" y="578" width="90" height="34" rx="6" />
+          <text class="d-s" x="60" y="599">users</text>
+          <rect class="d-box" x="144" y="578" width="90" height="34" rx="6" />
+          <text class="d-s" x="158" y="599">groups</text>
+          <rect class="d-box" x="242" y="578" width="112" height="34" rx="6" />
+          <text class="d-s" x="256" y="599">suggestions</text>
+          <rect class="d-box-accent" x="362" y="578" width="80" height="34" rx="6" />
+          <text class="d-s" x="376" y="599">votes</text>
+          <rect class="d-box" x="450" y="578" width="84" height="34" rx="6" />
+          <text class="d-s" x="464" y="599">activities</text>
+        </svg>
+        <figcaption>Figure 1 — Three tiers, one external dependency. Highlighted boxes are the pieces interviewers dig into: the Axios interceptor, the service layer, and the votes collection.</figcaption>
+      </figure>
+    </section>
+
+    <section id="s3">
+      <p class="sec-no">03</p>
+      <h3>Folder map</h3>
+      <p>Point at this when asked “how did you organise the code?”</p>
+
+      <pre><code>TripLane/
+├── package.json                      # root scripts: install:all, dev:server, dev:client
+├── README.md
+├── docs/interview-guide.html         # this document
+│
+├── server/
+│   ├── .env.example                  # every variable, documented
+│   ├── .env                          # real secrets (gitignored)
+│   └── src/
+│       ├── server.js                 # boot: connect DB → listen → graceful shutdown
+│       ├── app.js                    # express app + middleware chain
+│       ├── config/
+│       │   ├── env.js                # loads .env, exits if MONGO_URI/JWT_SECRET missing
+│       │   └── db.js                 # mongoose.connect
+│       ├── models/
+│       │   ├── User.js               # bcrypt pre-save hook, password select:false
+│       │   ├── Group.js              # members[] embedded, inviteCode unique
+│       │   ├── Suggestion.js         # activities[] embedded, unique(group, placeId)
+│       │   ├── Vote.js               # unique(group, user) ← duplicate-vote guard
+│       │   └── Activity.js           # append-only feed
+│       ├── middleware/
+│       │   ├── auth.js               # requireAuth: verify JWT, load req.user
+│       │   ├── groupAccess.js        # requireGroupMember / requireGroupOwner
+│       │   ├── validate.js           # turns express-validator result into 400
+│       │   └── errorHandler.js       # notFoundHandler + single error formatter
+│       ├── controllers/
+│       │   ├── authController.js     # register, login, me
+│       │   ├── groupController.js    # create/join/update/finalize/reopen/members/feed
+│       │   ├── suggestionController.js
+│       │   ├── voteController.js     # castVote, retractVote
+│       │   └── placesController.js   # search, details, photo proxy
+│       ├── services/
+│       │   ├── votingService.js      # tallyGroupVotes, getUserVote, getVoterIds
+│       │   ├── placesService.js      # Google calls + offline fallback catalogue
+│       │   └── activityService.js    # logActivity (never throws)
+│       ├── routes/
+│       │   ├── index.js              # mounts /auth /groups /places + /health
+│       │   ├── authRoutes.js
+│       │   ├── groupRoutes.js        # the big one — groups, suggestions, votes
+│       │   └── placesRoutes.js
+│       └── utils/
+│           ├── ApiError.js           # status + machine-readable code
+│           ├── asyncHandler.js       # forwards async rejections to errorHandler
+│           ├── presenters.js         # the JSON contract, in one file
+│           ├── token.js              # sign / verify JWT
+│           ├── inviteCode.js         # crypto-random, unambiguous alphabet
+│           └── currencies.js         # 39 supported codes (server = authority)
+│
+└── client/
+    ├── vite.config.js                # proxies /api → localhost:5000
+    ├── tailwind.config.js            # brand + ink palettes
+    └── src/
+        ├── main.jsx                  # BrowserRouter → ToastProvider → AuthProvider
+        ├── App.jsx                   # all routes + guards
+        ├── api/
+        │   ├── client.js             # Axios instance, interceptors, parseApiError
+        │   └── endpoints.js          # one wrapper per REST endpoint
+        ├── context/
+        │   ├── AuthContext.jsx       # user, login, register, logout, initialising
+        │   └── ToastContext.jsx
+        ├── hooks/useCountdown.js     # ticks once/sec, stops when target passes
+        ├── components/
+        │   ├── ui/                   # Button, Input, Modal, Badge, Avatar, …
+        │   ├── layout/               # Navbar, AppLayout, ProtectedRoute, PublicOnlyRoute
+        │   └── group/                # VotingPanel, SuggestionCard, Countdown, …
+        ├── pages/                    # Landing, Login, Register, Dashboard, GroupWorkspace
+        └── utils/
+            ├── format.js             # formatMoney, formatDateRange, relativeTime
+            └── currencies.js         # picker list + guessCurrency()</code></pre>
+
+      <div class="note">
+        <h5>The one-line answer</h5>
+        <p>
+          “Routes validate, middleware authorises, controllers orchestrate, services hold the logic,
+          presenters shape the JSON. Controllers never build a response object by hand, so every
+          endpoint returns identical field names.”
+        </p>
+      </div>
+    </section>
+
+    <section id="s4">
+      <p class="sec-no">04</p>
+      <h3>Every route, with its file path</h3>
+      <p>
+        All API routes are mounted under <code>/api</code> by
+        <code>server/src/app.js</code> → <code>server/src/routes/index.js</code>. The
+        <strong>Guards</strong> column is the middleware chain in execution order — that ordering is
+        itself an interview answer.
+      </p>
+
+      <h4>Auth — <code>server/src/routes/authRoutes.js</code></h4>
+      <div class="scroll">
+        <table>
+          <thead>
+            <tr><th>Method</th><th>Path</th><th>Guards → handler</th><th>Notes</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="verb post">POST</span></td>
+              <td><code>/api/auth/register</code></td>
+              <td><code>authLimiter → rules → validate → authController.register</code></td>
+              <td class="who">Returns <code>{token, user}</code></td>
+            </tr>
+            <tr>
+              <td><span class="verb post">POST</span></td>
+              <td><code>/api/auth/login</code></td>
+              <td><code>authLimiter → rules → validate → authController.login</code></td>
+              <td class="who">401 on bad credentials</td>
+            </tr>
+            <tr>
+              <td><span class="verb get">GET</span></td>
+              <td><code>/api/auth/me</code></td>
+              <td><code>requireAuth → authController.me</code></td>
+              <td class="who">Restores a session on refresh</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h4>Groups, suggestions and votes — <code>server/src/routes/groupRoutes.js</code></h4>
+      <p>
+        This file opens with <code>router.use(requireAuth)</code>, so <em>every</em> route below is
+        authenticated before anything else runs.
+      </p>
+      <div class="scroll">
+        <table>
+          <thead>
+            <tr><th>Method</th><th>Path</th><th>Guards → handler</th><th>Who</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><span class="verb get">GET</span></td><td><code>/api/groups</code></td><td><code>groupController.listMyGroups</code></td><td class="who">any member</td></tr>
+            <tr><td><span class="verb post">POST</span></td><td><code>/api/groups</code></td><td><code>groupBodyRules() → validate → createGroup</code></td><td class="who">any user</td></tr>
+            <tr><td><span class="verb post">POST</span></td><td><code>/api/groups/join</code></td><td><code>validate → joinGroup</code></td><td class="who">any user</td></tr>
+            <tr><td><span class="verb get">GET</span></td><td><code>/api/groups/:groupId</code></td><td><code>requireGroupMember → getGroup</code></td><td class="who">member</td></tr>
+            <tr><td><span class="verb patch">PATCH</span></td><td><code>/api/groups/:groupId</code></td><td><code>requireGroupMember → requireGroupOwner → groupBodyRules({partial:true}) → validate → updateGroup</code></td><td class="who">organiser</td></tr>
+            <tr><td><span class="verb del">DELETE</span></td><td><code>/api/groups/:groupId</code></td><td><code>requireGroupMember → requireGroupOwner → deleteGroup</code></td><td class="who">organiser</td></tr>
+            <tr><td><span class="verb post">POST</span></td><td><code>/api/groups/:groupId/leave</code></td><td><code>requireGroupMember → leaveGroup</code></td><td class="who">member</td></tr>
+            <tr><td><span class="verb del">DELETE</span></td><td><code>/api/groups/:groupId/members/:userId</code></td><td><code>requireGroupMember → requireGroupOwner → removeMember</code></td><td class="who">organiser</td></tr>
+            <tr><td><span class="verb get">GET</span></td><td><code>/api/groups/:groupId/activity</code></td><td><code>requireGroupMember → validate → getActivityFeed</code></td><td class="who">member</td></tr>
+            <tr><td><span class="verb get">GET</span></td><td><code>/api/groups/:groupId/results</code></td><td><code>requireGroupMember → getResults</code></td><td class="who">member</td></tr>
+            <tr><td><span class="verb post">POST</span></td><td><code>/api/groups/:groupId/finalize</code></td><td><code>requireGroupMember → requireGroupOwner → validate → finalizeTrip</code></td><td class="who">organiser</td></tr>
+            <tr><td><span class="verb post">POST</span></td><td><code>/api/groups/:groupId/reopen</code></td><td><code>requireGroupMember → requireGroupOwner → reopenTrip</code></td><td class="who">organiser</td></tr>
+            <tr><td><span class="verb get">GET</span></td><td><code>/api/groups/:groupId/suggestions</code></td><td><code>requireGroupMember → listSuggestions</code></td><td class="who">member</td></tr>
+            <tr><td><span class="verb post">POST</span></td><td><code>/api/groups/:groupId/suggestions</code></td><td><code>requireGroupMember → suggestionBodyRules() → validate → createSuggestion</code></td><td class="who">member</td></tr>
+            <tr><td><span class="verb patch">PATCH</span></td><td><code>/api/groups/:groupId/suggestions/:suggestionId</code></td><td><code>requireGroupMember → validate → updateSuggestion</code></td><td class="who">author or organiser</td></tr>
+            <tr><td><span class="verb del">DELETE</span></td><td><code>/api/groups/:groupId/suggestions/:suggestionId</code></td><td><code>requireGroupMember → validate → deleteSuggestion</code></td><td class="who">author or organiser</td></tr>
+            <tr><td><span class="verb post">POST</span></td><td><code>/api/groups/:groupId/suggestions/:suggestionId/activities</code></td><td><code>requireGroupMember → validate → addPlannedActivity</code></td><td class="who">member</td></tr>
+            <tr><td><span class="verb del">DELETE</span></td><td><code>/api/groups/:groupId/suggestions/:suggestionId/activities/:activityId</code></td><td><code>requireGroupMember → validate → removePlannedActivity</code></td><td class="who">author or organiser</td></tr>
+            <tr><td><span class="verb post">POST</span></td><td><code>/api/groups/:groupId/suggestions/:suggestionId/vote</code></td><td><code>requireGroupMember → validate → voteController.castVote</code></td><td class="who">member</td></tr>
+            <tr><td><span class="verb del">DELETE</span></td><td><code>/api/groups/:groupId/suggestions/:suggestionId/vote</code></td><td><code>requireGroupMember → validate → voteController.retractVote</code></td><td class="who">member</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h4>Places — <code>server/src/routes/placesRoutes.js</code></h4>
+      <div class="scroll">
+        <table>
+          <thead>
+            <tr><th>Method</th><th>Path</th><th>Guards → handler</th><th>Who</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><span class="verb get">GET</span></td><td><code>/api/places/photo</code></td><td><code>placesLimiter → placesController.photo</code></td><td class="who"><strong>public</strong></td></tr>
+            <tr><td><span class="verb get">GET</span></td><td><code>/api/places/search</code></td><td><code>requireAuth → placesLimiter → search</code></td><td class="who">signed in</td></tr>
+            <tr><td><span class="verb get">GET</span></td><td><code>/api/places/:placeId</code></td><td><code>requireAuth → placesLimiter → details</code></td><td class="who">signed in</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="note warn">
+        <h5>Expect this question</h5>
+        <p>
+          “Why is <code>/api/places/photo</code> public when everything else needs a token?” Because
+          the browser loads it with <code>&lt;img src="..."&gt;</code>, and an image tag cannot send
+          an <code>Authorization</code> header. It is registered <em>before</em>
+          <code>router.use(requireAuth)</code> in that file, deliberately. It stays safe because the
+          photo reference is validated against a strict regex, the Google key never leaves the
+          server, and the endpoint is rate limited to 60 requests a minute.
+        </p>
+      </div>
+
+      <h4>Health — <code>server/src/routes/index.js</code></h4>
+      <div class="scroll">
+        <table>
+          <thead><tr><th>Method</th><th>Path</th><th>Purpose</th></tr></thead>
+          <tbody>
+            <tr><td><span class="verb get">GET</span></td><td><code>/api/health</code></td><td>Liveness probe — <code>{ status, uptime }</code>, no auth</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h4>Frontend routes — <code>client/src/App.jsx</code></h4>
+      <div class="scroll">
+        <table>
+          <thead><tr><th>Path</th><th>Component file</th><th>Guard</th></tr></thead>
+          <tbody>
+            <tr><td><code>/</code></td><td><code>client/src/pages/Landing.jsx</code></td><td class="who">public</td></tr>
+            <tr><td><code>/login</code></td><td><code>client/src/pages/Login.jsx</code></td><td class="who">PublicOnlyRoute</td></tr>
+            <tr><td><code>/register</code></td><td><code>client/src/pages/Register.jsx</code></td><td class="who">PublicOnlyRoute</td></tr>
+            <tr><td><code>/dashboard</code></td><td><code>client/src/pages/Dashboard.jsx</code></td><td class="who">ProtectedRoute</td></tr>
+            <tr><td><code>/groups/:groupId</code></td><td><code>client/src/pages/GroupWorkspace.jsx</code></td><td class="who">ProtectedRoute</td></tr>
+            <tr><td><code>/groups</code></td><td>redirect → <code>/dashboard</code></td><td class="who">—</td></tr>
+            <tr><td><code>*</code></td><td><code>client/src/pages/NotFound.jsx</code></td><td class="who">public</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="s5">
+      <p class="sec-no">05</p>
+      <h3>Request lifecycle</h3>
+      <p>
+        “Walk me through what happens when a request comes in” is asked in almost every backend
+        interview. Trace one concrete request:
+        <code>POST /api/groups/:groupId/suggestions/:suggestionId/vote</code>.
+      </p>
+
+      <figure>
+        <svg viewBox="0 0 780 620" role="img" aria-label="A request passes through helmet, CORS, body parser, rate limiter, route matching, requireAuth, requireGroupMember, validation, controller, service and model before a presenter builds the JSON response; any stage can throw to a single error handler.">
+          <defs>
+            <marker id="arw2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path class="d-arrow" d="M0 0 L10 5 L0 10 z" />
+            </marker>
+            <marker id="arwd" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path class="d-arrow-d" d="M0 0 L10 5 L0 10 z" />
+            </marker>
+          </defs>
+
+          <rect class="d-box-accent" x="40" y="20" width="300" height="38" rx="8" />
+          <text class="d-t-b" x="56" y="44">Request from the browser</text>
+
+          <g>
+            <rect class="d-box" x="40" y="76" width="300" height="34" rx="7" />
+            <text class="d-t" x="56" y="92">1 · helmet</text>
+            <text class="d-s" x="56" y="105">security headers</text>
+            <line class="d-line" x1="190" y1="58" x2="190" y2="72" marker-end="url(#arw2)" />
+
+            <rect class="d-box" x="40" y="126" width="300" height="34" rx="7" />
+            <text class="d-t" x="56" y="142">2 · cors</text>
+            <text class="d-s" x="56" y="155">origin must be in CLIENT_ORIGIN</text>
+            <line class="d-line" x1="190" y1="110" x2="190" y2="122" marker-end="url(#arw2)" />
+
+            <rect class="d-box" x="40" y="176" width="300" height="34" rx="7" />
+            <text class="d-t" x="56" y="192">3 · express.json</text>
+            <text class="d-s" x="56" y="205">body capped at 100 kb</text>
+            <line class="d-line" x1="190" y1="160" x2="190" y2="172" marker-end="url(#arw2)" />
+
+            <rect class="d-box" x="40" y="226" width="300" height="34" rx="7" />
+            <text class="d-t" x="56" y="242">4 · rate limiter</text>
+            <text class="d-s" x="56" y="255">300 req / min / IP</text>
+            <line class="d-line" x1="190" y1="210" x2="190" y2="222" marker-end="url(#arw2)" />
+
+            <rect class="d-box" x="40" y="276" width="300" height="34" rx="7" />
+            <text class="d-t" x="56" y="292">5 · route match — groupRoutes.js</text>
+            <text class="d-s" x="56" y="305">/:groupId/suggestions/:suggestionId/vote</text>
+            <line class="d-line" x1="190" y1="260" x2="190" y2="272" marker-end="url(#arw2)" />
+
+            <rect class="d-box-accent" x="40" y="326" width="300" height="34" rx="7" />
+            <text class="d-t" x="56" y="342">6 · requireAuth</text>
+            <text class="d-s" x="56" y="355">verify JWT → load req.user (401)</text>
+            <line class="d-line" x1="190" y1="310" x2="190" y2="322" marker-end="url(#arw2)" />
+
+            <rect class="d-box-accent" x="40" y="376" width="300" height="34" rx="7" />
+            <text class="d-t" x="56" y="392">7 · requireGroupMember</text>
+            <text class="d-s" x="56" y="405">not a member → 404, never 403</text>
+            <line class="d-line" x1="190" y1="360" x2="190" y2="372" marker-end="url(#arw2)" />
+
+            <rect class="d-box" x="40" y="426" width="300" height="34" rx="7" />
+            <text class="d-t" x="56" y="442">8 · validate</text>
+            <text class="d-s" x="56" y="455">express-validator → 400 + field details</text>
+            <line class="d-line" x1="190" y1="410" x2="190" y2="422" marker-end="url(#arw2)" />
+
+            <rect class="d-box" x="40" y="476" width="300" height="34" rx="7" />
+            <text class="d-t" x="56" y="492">9 · voteController.castVote</text>
+            <text class="d-s" x="56" y="505">→ votingService → Vote model</text>
+            <line class="d-line" x1="190" y1="460" x2="190" y2="472" marker-end="url(#arw2)" />
+
+            <rect class="d-box" x="40" y="526" width="300" height="34" rx="7" />
+            <text class="d-t" x="56" y="542">10 · presenters.js → res.json</text>
+            <text class="d-s" x="56" y="555">the one place response shapes live</text>
+            <line class="d-line" x1="190" y1="510" x2="190" y2="522" marker-end="url(#arw2)" />
+          </g>
+
+          <!-- error handler -->
+          <rect class="d-box-sig" x="450" y="240" width="290" height="110" rx="8" />
+          <text class="d-t-b" x="466" y="266">errorHandler.js</text>
+          <text class="d-s" x="466" y="286">any stage may throw an ApiError</text>
+          <text class="d-s" x="466" y="304">asyncHandler forwards rejections</text>
+          <text class="d-s" x="466" y="326">{ error: { message, code, details } }</text>
+          <text class="d-s" x="466" y="343">409 TIE · 409 DUPLICATE_VOTE · 400 …</text>
+
+          <path class="d-line-d" d="M340 93 L410 93 L410 250 L446 250" marker-end="url(#arwd)" />
+          <path class="d-line-d" d="M340 343 L400 343 L400 300 L446 300" marker-end="url(#arwd)" />
+          <path class="d-line-d" d="M340 443 L400 443 L400 320 L446 320" marker-end="url(#arwd)" />
+          <path class="d-line-d" d="M340 493 L420 493 L420 340 L446 340" marker-end="url(#arwd)" />
+          <text class="d-s" x="352" y="86">throw</text>
+        </svg>
+        <figcaption>Figure 2 — Ten stages, one exit for errors. The dashed lines are what <code>asyncHandler</code> buys you: no try/catch in any controller.</figcaption>
+      </figure>
+
+      <div class="note">
+        <h5>Say this</h5>
+        <p>
+          “Order matters. Cheap rejections happen first — headers, origin, body size, rate limit —
+          so an abusive request never reaches the database. Authentication comes before
+          authorisation, authorisation before validation, and validation before any business logic,
+          so by the time my controller runs I know the caller is real, allowed, and the input is
+          well-formed.”
+        </p>
+      </div>
+    </section>
+
+    <section id="s6">
+      <p class="sec-no">06</p>
+      <h3>Data model and indexes</h3>
+
+      <figure>
+        <svg viewBox="0 0 860 470" role="img" aria-label="Five collections: User owns Group; Group embeds members and has many Suggestions, Votes and Activities; Suggestion embeds planned activities; Vote has a unique index on group plus user.">
+          <defs>
+            <marker id="arw3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path class="d-arrow" d="M0 0 L10 5 L0 10 z" />
+            </marker>
+          </defs>
+
+          <rect class="d-box" x="24" y="120" width="176" height="130" rx="8" />
+          <text class="d-e" x="40" y="144">USER</text>
+          <text class="d-s" x="40" y="166">_id</text>
+          <text class="d-s" x="40" y="184">email · UNIQUE</text>
+          <text class="d-s" x="40" y="202">password · select:false</text>
+          <text class="d-s" x="40" y="220">name</text>
+          <text class="d-s" x="40" y="238">avatarColor</text>
+
+          <rect class="d-box-accent" x="300" y="70" width="220" height="188" rx="8" />
+          <text class="d-e" x="316" y="94">GROUP</text>
+          <text class="d-s" x="316" y="116">owner → User</text>
+          <text class="d-s" x="316" y="134">members[] { user, role }</text>
+          <text class="d-s" x="316" y="152">inviteCode · UNIQUE</text>
+          <text class="d-s" x="316" y="170">startDate / endDate</text>
+          <text class="d-s" x="316" y="188">budgetMin / budgetMax</text>
+          <text class="d-s" x="316" y="206">currency (39 allowed)</text>
+          <text class="d-s" x="316" y="224">status: planning|finalized</text>
+          <text class="d-s" x="316" y="242">finalSuggestion → Suggestion</text>
+
+          <rect class="d-box" x="620" y="40" width="216" height="150" rx="8" />
+          <text class="d-e" x="636" y="64">SUGGESTION</text>
+          <text class="d-s" x="636" y="86">group → Group</text>
+          <text class="d-s" x="636" y="104">createdBy → User</text>
+          <text class="d-s" x="636" y="122">placeId · UNIQUE per group</text>
+          <text class="d-s" x="636" y="140">estimatedCost, dates</text>
+          <text class="d-s" x="636" y="158">activities[] embedded</text>
+          <text class="d-s" x="636" y="176">photoRef, rating</text>
+
+          <rect class="d-box-accent" x="300" y="316" width="220" height="118" rx="8" />
+          <text class="d-e" x="316" y="340">VOTE</text>
+          <text class="d-s" x="316" y="362">group → Group</text>
+          <text class="d-s" x="316" y="380">user → User</text>
+          <text class="d-s" x="316" y="398">suggestion → Suggestion</text>
+          <text class="d-s" x="316" y="422">UNIQUE(group, user)</text>
+
+          <rect class="d-box" x="620" y="326" width="216" height="100" rx="8" />
+          <text class="d-e" x="636" y="350">ACTIVITY</text>
+          <text class="d-s" x="636" y="372">group → Group</text>
+          <text class="d-s" x="636" y="390">actor → User</text>
+          <text class="d-s" x="636" y="408">type, message, meta</text>
+
+          <line class="d-line" x1="200" y1="164" x2="296" y2="164" marker-end="url(#arw3)" />
+          <text class="d-s" x="212" y="156">owns 1..N</text>
+
+          <line class="d-line" x1="520" y1="120" x2="616" y2="120" marker-end="url(#arw3)" />
+          <text class="d-s" x="530" y="112">1..N</text>
+
+          <line class="d-line" x1="410" y1="258" x2="410" y2="312" marker-end="url(#arw3)" />
+          <text class="d-s" x="420" y="288">1..N</text>
+
+          <line class="d-line" x1="520" y1="370" x2="616" y2="370" marker-end="url(#arw3)" />
+          <text class="d-s" x="530" y="362">1..N</text>
+
+          <path class="d-line" d="M728 190 L728 250 L560 250 L560 350 L616 350" marker-end="url(#arw3)" opacity=".55" />
+          <text class="d-s" x="566" y="243">voted for</text>
+        </svg>
+        <figcaption>Figure 3 — Five collections. The two highlighted boxes carry the rules that make the product correct: one currency per group, and one vote per user per group enforced by a unique index.</figcaption>
+      </figure>
+
+      <div class="scroll">
+        <table>
+          <thead><tr><th>Index</th><th>Collection</th><th>Why it exists</th></tr></thead>
+          <tbody>
+            <tr><td><code>{ email: 1 }</code> unique</td><td>users</td><td>One account per address; makes login lookup O(log n)</td></tr>
+            <tr><td><code>{ inviteCode: 1 }</code> unique</td><td>groups</td><td>Join-by-code lookup, and guarantees codes never collide</td></tr>
+            <tr><td><code>{ "members.user": 1 }</code></td><td>groups</td><td>Powers <code>GET /api/groups</code> — “trips I belong to”</td></tr>
+            <tr><td><code>{ group: 1 }</code></td><td>suggestions</td><td>Every workspace load lists suggestions by group</td></tr>
+            <tr><td><code>{ group: 1, placeId: 1 }</code> unique, partial</td><td>suggestions</td><td>Same destination cannot be proposed twice and split the vote. Partial so manual entries (no <code>placeId</code>) are exempt</td></tr>
+            <tr><td><code>{ group: 1, user: 1 }</code> unique</td><td>votes</td><td><strong>The duplicate-vote guarantee.</strong> Even two simultaneous requests cannot create a second vote</td></tr>
+            <tr><td><code>{ group: 1, createdAt: -1 }</code></td><td>activities</td><td>Feed reads newest-first for one group</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="s7">
+      <p class="sec-no">07</p>
+      <h3>Voting mechanics</h3>
+      <p>
+        The rule: <strong>one vote per member per group</strong> — not per suggestion. Voting for a
+        different destination <em>moves</em> your existing vote. This is the design decision the
+        project is built around, so be ready to defend it.
+      </p>
+
+      <figure>
+        <svg viewBox="0 0 820 400" role="img" aria-label="Casting a vote: the controller looks for an existing vote, rejects a repeat of the same suggestion with 409, moves the vote if it points elsewhere, and otherwise creates one; a unique index catches concurrent duplicates.">
+          <defs>
+            <marker id="arw4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path class="d-arrow" d="M0 0 L10 5 L0 10 z" />
+            </marker>
+          </defs>
+
+          <rect class="d-box-accent" x="30" y="24" width="240" height="38" rx="8" />
+          <text class="d-t-b" x="46" y="48">POST …/:suggestionId/vote</text>
+
+          <rect class="d-box" x="30" y="90" width="240" height="52" rx="8" />
+          <text class="d-t" x="46" y="112">group.status === 'finalized'?</text>
+          <text class="d-s" x="46" y="130">yes → 409 TRIP_FINALIZED</text>
+          <line class="d-line" x1="150" y1="62" x2="150" y2="86" marker-end="url(#arw4)" />
+
+          <rect class="d-box" x="30" y="170" width="240" height="52" rx="8" />
+          <text class="d-t" x="46" y="192">Vote.findOne({ group, user })</text>
+          <text class="d-s" x="46" y="210">does this member already hold a vote?</text>
+          <line class="d-line" x1="150" y1="142" x2="150" y2="166" marker-end="url(#arw4)" />
+
+          <line class="d-line" x1="150" y1="222" x2="150" y2="250" marker-end="url(#arw4)" />
+
+          <rect class="d-box-sig" x="30" y="254" width="240" height="56" rx="8" />
+          <text class="d-t" x="46" y="276">same suggestion</text>
+          <text class="d-s" x="46" y="296">409 DUPLICATE_VOTE</text>
+
+          <rect class="d-box" x="300" y="254" width="220" height="56" rx="8" />
+          <text class="d-t" x="316" y="276">different suggestion</text>
+          <text class="d-s" x="316" y="296">move it · 200 · changed:true</text>
+          <path class="d-line" d="M270 196 L410 196 L410 250" marker-end="url(#arw4)" />
+
+          <rect class="d-box" x="550" y="254" width="240" height="56" rx="8" />
+          <text class="d-t" x="566" y="276">no vote yet</text>
+          <text class="d-s" x="566" y="296">create it · 201</text>
+          <path class="d-line" d="M270 186 L660 186 L660 250" marker-end="url(#arw4)" />
+
+          <rect class="d-box-accent" x="300" y="336" width="490" height="46" rx="8" />
+          <text class="d-t-b" x="316" y="358">Second layer — UNIQUE(group, user) in MongoDB</text>
+          <text class="d-s" x="316" y="374">a concurrent duplicate raises E11000; the catch converts it into a move</text>
+          <line class="d-line" x1="670" y1="310" x2="670" y2="332" marker-end="url(#arw4)" />
+          <line class="d-line" x1="410" y1="310" x2="410" y2="332" marker-end="url(#arw4)" />
+        </svg>
+        <figcaption>Figure 4 — Two layers of duplicate prevention: a friendly 409 for the normal case, and a database constraint that holds even when two requests race.</figcaption>
+      </figure>
+
+      <div class="note">
+        <h5>Defend the design</h5>
+        <p>
+          “One vote per group keeps the tally meaningful — the percentages always sum to 100%, so
+          ‘Kyoto is at 67%’ actually means two of three members. If I had allowed one vote per
+          suggestion, a member could approve everything and the numbers would stop being a ranking.”
+        </p>
+      </div>
+    </section>
+
+    <section id="s8">
+      <p class="sec-no">08</p>
+      <h3>Finalising, and what happens on a tie</h3>
+      <p>
+        A tie is not an error — it is a state the product has to have an opinion about. Mine: the
+        system refuses to guess, and hands the decision back to the organiser.
+      </p>
+
+      <figure>
+        <svg viewBox="0 0 820 340" role="img" aria-label="Finalising checks for suggestions, then whether anyone voted, then whether the top count is shared; a tie returns 409 with the tied leaders so the organiser can choose one explicitly.">
+          <defs>
+            <marker id="arw5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path class="d-arrow" d="M0 0 L10 5 L0 10 z" />
+            </marker>
+          </defs>
+
+          <rect class="d-box-accent" x="24" y="24" width="230" height="40" rx="8" />
+          <text class="d-t-b" x="40" y="42">POST /:groupId/finalize</text>
+          <text class="d-s" x="40" y="57">organiser only</text>
+
+          <rect class="d-box" x="24" y="96" width="230" height="46" rx="8" />
+          <text class="d-t" x="40" y="118">any suggestions at all?</text>
+          <text class="d-s" x="40" y="134">no → 400</text>
+          <line class="d-line" x1="139" y1="64" x2="139" y2="92" marker-end="url(#arw5)" />
+
+          <rect class="d-box" x="24" y="174" width="230" height="46" rx="8" />
+          <text class="d-t" x="40" y="196">tallyGroupVotes(groupId)</text>
+          <text class="d-s" x="40" y="212">aggregation → counts, leaders</text>
+          <line class="d-line" x1="139" y1="142" x2="139" y2="170" marker-end="url(#arw5)" />
+
+          <rect class="d-box" x="24" y="252" width="230" height="56" rx="8" />
+          <text class="d-t" x="40" y="274">totalVotes === 0?</text>
+          <text class="d-s" x="40" y="294">400 NO_VOTES — unless id given</text>
+          <line class="d-line" x1="139" y1="220" x2="139" y2="248" marker-end="url(#arw5)" />
+
+          <rect class="d-box-sig" x="300" y="150" width="240" height="86" rx="8" />
+          <text class="d-t-b" x="316" y="174">leaders.length &gt; 1 → TIE</text>
+          <text class="d-s" x="316" y="194">409 { code:'TIE',</text>
+          <text class="d-s" x="316" y="211">  details:{ leaders, votes } }</text>
+          <text class="d-s" x="316" y="228">UI opens a tie-break chooser</text>
+          <line class="d-line" x1="254" y1="196" x2="296" y2="192" marker-end="url(#arw5)" />
+
+          <rect class="d-box" x="586" y="150" width="212" height="86" rx="8" />
+          <text class="d-t-b" x="602" y="174">organiser picks a leader</text>
+          <text class="d-s" x="602" y="194">retry with { suggestionId }</text>
+          <text class="d-s" x="602" y="211">must be one of the tied ids</text>
+          <text class="d-s" x="602" y="228">otherwise 400</text>
+          <line class="d-line" x1="540" y1="192" x2="582" y2="192" marker-end="url(#arw5)" />
+
+          <rect class="d-box-accent" x="300" y="266" width="498" height="52" rx="8" />
+          <text class="d-t-b" x="316" y="288">status='finalized' · finalSuggestion set · dates copied from the winner</text>
+          <text class="d-s" x="316" y="306">voting closes (409 on further votes) · countdown starts · feed entry written</text>
+          <line class="d-line" x1="692" y1="236" x2="692" y2="262" marker-end="url(#arw5)" />
+        </svg>
+        <figcaption>Figure 5 — Finalisation refuses to break a tie on its own; it returns the tied candidates and makes the organiser choose.</figcaption>
+      </figure>
+    </section>
+
+    <!-- ================= PART II ================= -->
+    <div class="part">
+      <p class="eyebrow">Part II</p>
+      <h2>Questions you will actually be asked</h2>
+      <p>
+        Click any question to open the answer. Each one ends with the file to open if they push
+        further — the fastest way to sound like you wrote the code is to know where it lives.
+      </p>
+    </div>
+
+    <section id="s9">
+      <p class="sec-no">09</p>
+      <h3>General &amp; architecture</h3>
+
+      <div class="qa">
+        <details class="q">
+          <summary><b>Q</b> Why MERN? Why not something else?</summary>
+          <div class="a">
+            <p>Answer honestly, then justify per piece rather than saying “it’s popular”:</p>
+            <ul>
+              <li><strong>React</strong> — the UI is a lot of small stateful pieces (vote buttons, countdown, modals) that re-render off shared state. A component model is the right fit.</li>
+              <li><strong>Express</strong> — I wanted explicit control of the middleware order for auth and authorisation; Express makes that chain visible in one file.</li>
+              <li><strong>MongoDB</strong> — a suggestion embeds a variable-length itinerary and a group embeds its member list. Those are documents, not rows. I still used references where I needed integrity, so it is not “schemaless” by accident.</li>
+              <li><strong>Node</strong> — one language across the stack; the workload is I/O-bound (DB + Google Places), which is exactly what the event loop is good at.</li>
+            </ul>
+            <p>If pushed on Postgres: “Votes and members are genuinely relational and I’d get transactions for free. If this grew, that’s the migration I’d consider first.” Admitting that reads as senior, not weak.</p>
+            <div class="where"><span>Where</span><code>server/src/app.js</code><code>server/src/models/</code></div>
+          </div>
+        </details>
+
+        <details class="q">
+          <summary><b>Q</b> Walk me through your architecture.</summary>
+          <div class="a">
+            <p>Use Figure 1, and narrate one request rather than listing folders: “The React SPA holds the session in Context; an Axios interceptor attaches the JWT. The Express app runs a fixed middleware chain — helmet, CORS, JSON limit, rate limit — then routes match and validate, middleware authorises, a controller orchestrates, a service holds the logic, and a presenter shapes the JSON. Mongoose talks to five collections. The only external call is Google Places, made server-side.”</p>
+            <div class="where"><span>Where</span><code>server/src/app.js</code><code>server/src/routes/index.js</code></div>
+          </div>
+        </details>
+
+        <details class="q">
+          <summary><b>Q</b> Why the extra layers? Isn’t a controller enough for a project this size?</summary>
+          <div class="a">
+            <p>Point at a concrete payoff: the vote tally is needed by three different endpoints — the workspace load, the results endpoint and finalisation. It lives in <code>votingService.tallyGroupVotes()</code> once. If it lived in a controller, I’d have copied an aggregation three times and they would have drifted.</p>
+            <p>Same for <code>presenters.js</code>: the client relies on <code>suggestion.totalCost</code> existing on every response. One file guarantees that.</p>
+            <div class="where"><span>Where</span><code>server/src/services/votingService.js</code><code>server/src/utils/presenters.js</code></div>
+          </div>
+        </details>
+
+        <details class="q">
+          <summary><b>Q</b> What was the hardest part?</summary>
+          <div class="a">
+            <p>Don’t say “CSS”. Say: “Deciding what the system should do when the vote ties. Everything else had an obvious right answer; a tie has several defensible ones — random pick, earliest suggestion, organiser decides, re-vote. I chose to make the API refuse to guess: it returns 409 with the tied candidates, and the UI turns that into a chooser. The rule became ‘the software never invents a decision the group didn’t make’.”</p>
+            <div class="where"><span>Where</span><code>server/src/controllers/groupController.js</code> → <code>finalizeTrip</code></div>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section id="s10">
+      <p class="sec-no">10</p>
+      <h3>Frontend</h3>
+
+      <div class="qa">
+        <details class="q">
+          <summary><b>Q</b> Why Context API instead of Redux?</summary>
+          <div class="a">
+            <p>“There is exactly one piece of truly global state — the signed-in user. Everything else is page-local and fetched per screen. Redux would add a store, actions and reducers to hold one object. Context is the right size. If I added cross-page caching or optimistic updates I’d reach for React Query before Redux, because the real problem would be server-state caching, not global state.”</p>
+            <div class="where"><span>Where</span><code>client/src/context/AuthContext.jsx</code></div>
+          </div>
+        </details>
+
+        <details class="q">
+          <summary><b>Q</b> How do protected routes work — and why doesn’t refreshing a deep link log me out?</summary>
+          <div class="a">
+            <p>This is the detail that separates a copied tutorial from real work. <code>AuthContext</code> has an <code>initialising</code> flag that starts <code>true</code>. On mount it calls <code>GET /api/auth/me</code> with the stored token.</p>
+            <ul>
+              <li>While <code>initialising</code> is true, <code>ProtectedRoute</code> renders a spinner — it does <strong>not</strong> redirect.</li>
+              <li>Only once the check resolves does it either render the page or send you to <code>/login</code>.</li>
+            </ul>
+            <p>Without that flag, refreshing <code>/groups/abc123</code> would bounce to login for a moment, because on the very first render the user is still <code>null</code>. It also stashes the attempted path in router state so login returns you there.</p>
+            <div class="where"><span>Where</span><code>client/src/components/layout/ProtectedRoute.jsx</code><code>client/src/context/AuthContext.jsx</code></div>
+          </div>
+        </details>
+
+        <details class="q">
+          <summary><b>Q</b> How is the token attached, and what happens when it expires?</summary>
+          <div class="a">
+            <p>A request interceptor in <code>client/src/api/client.js</code> reads the token from <code>localStorage</code> and sets <code>Authorization: Bearer …</code>. A response interceptor watches for 401s and calls a handler that <code>AuthContext</code> registered, which clears the session once, centrally — instead of every component handling expiry.</p>
+            <p>One subtlety worth mentioning: 401s from <code>/auth/*</code> routes are skipped, because a failed login is a normal outcome and shouldn’t trigger a global “session expired” wipe.</p>
+            <div class="where"><span>Where</span><code>client/src/api/client.js</code></div>
+          </div>
+        </details>
+
+        <details class="q">
+          <summary><b>Q</b> Your destination search fires on every keystroke — how do you avoid hammering the API and getting out-of-order results?</summary>
+          <div class="a">
+            <p>Two separate problems, two fixes:</p>
+            <ul>
+              <li><strong>Volume</strong> — a 350&nbsp;ms debounce; the timer is cleared in the effect’s cleanup on each keystroke.</li>
+              <li><strong>Ordering</strong> — every in-flight request carries an <code>AbortController</code> signal, and a newer keystroke aborts the previous one. Without this, a slow response for “go” could land after “goa” and overwrite the correct results.</li>
+            </ul>
+            <p>Aborted requests surface as <code>ERR_CANCELED</code>, which is checked and ignored rather than shown as an error.</p>
+            <div class="where"><span>Where</span><code>client/src/components/group/PlaceSearch.jsx</code></div>
+          </div>
+        </details>
+
+        <details class="q">
+          <summary><b>Q</b> How does the countdown work? Does it leak?</summary>
+          <div class="a">
+            <p><code>useCountdown</code> takes a target date and sets a one-second interval, returning days/hours/minutes/seconds. Two details to volunteer:</p>
+            <ul>
+              <li>The effect returns <code>clearInterval</code>, so navigating away kills the timer.</li>
+              <li>If the target is already in the past, no interval is created at all — a finished trip doesn’t re-render once a second forever.</li>
+            </ul>
+            <div class="where"><span>Where</span><code>client/src/hooks/useCountdown.js</code></div>
+          </div>
+        </details>
+
+        <details class="q">
+          <summary><b>Q</b> After someone votes, how does the UI update? Why not optimistic updates?</summary>
+          <div class="a">
+            <p>The workspace calls a single <code>refresh()</code> that re-reads the group and the feed, so every panel — cards, standings, members, feed — is rendered from one server response and cannot disagree with itself.</p>
+            <p>Why not optimistic: a vote can legitimately be rejected by the server (trip just got finalised, a duplicate, the suggestion was deleted). Optimistically moving the bar and rolling it back would show a number that was never true. For a per-click action this cheap, correctness beat the few hundred milliseconds.</p>
+            <div class="where"><span>Where</span><code>client/src/pages/GroupWorkspace.jsx</code></div>
+          </div>
+        </details>
+
+        <details class="q">
+          <summary><b>Q</b> How did you keep components reusable?</summary>
+          <div class="a">
+            <p>A <code>ui/</code> folder of primitives with no business knowledge — <code>Button</code>, <code>Input</code>, <code>Modal</code>, <code>Badge</code>, <code>Avatar</code>, <code>ConfirmDialog</code>, <code>EmptyState</code>, <code>Spinner</code>. The one worth demoing is <code>Input</code>: it takes an <code>as</code> prop, so the same component renders an input, a textarea or a select while keeping identical label, hint, error and <code>aria-describedby</code> wiring. The currency picker is literally <code>&lt;Input as="select"&gt;</code>.</p>
+            <div class="where"><span>Where</span><code>client/src/components/ui/Input.jsx</code></div>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section id="s11">
+      <p class="sec-no">11</p>
+      <h3>Backend &amp; API design</h3>
+
+      <div class="qa">
+        <details class="q">
+          <summary><b>Q</b> Why are suggestions and votes nested under groups in the URL?</summary>
+          <div class="a">
+            <p>Because they have no meaning outside a group, and nesting makes authorisation structural rather than optional: <code>requireGroupMember</code> runs on <code>:groupId</code> for every nested route, so there is no path to a suggestion that skips the membership check. A flat <code>/api/suggestions/:id</code> would need the same check re-implemented in every handler, and one forgotten line would be a data leak.</p>
+            <div class="where"><span>Where</span><code>server/src/routes/groupRoutes.js</code><code>server/src/middleware/groupAccess.js</code></div>
+          </div>
+        </details>
+
+        <details class="q">
+          <summary><b>Q</b> You have no try/catch in your controllers. Why not?</summary>
+          <div class="a">
+            <p>Express 4 does not catch rejected promises from an async handler — it hangs the request. Every handler is wrapped in <code>asyncHandler</code>, a three-line utility that catches the rejection and calls <code>next(err)</code>, so all errors land in one place. That is also why controllers can just <code>throw ApiError.forbidden(...)</code> and trust the outcome.</p>
+            <pre><code>const asyncHandler = (fn) =&gt; (req, res, next) =&gt;
+  Promise.resolve(fn(req, res, next)).catch(next);</code></pre>
+            <div class="where"><span>Where</span><code>server/src/utils/asyncHandler.js</code><code>server/src/middleware/errorHandler.js</code></div>
+          </div>
+        </details>
+
+        <details class="q">
+          <summary><b>Q</b> How does your client know <em>why</em> a request failed?</summary>
+          <div class="a">
+            <p>Every failure returns the same envelope, with a machine-readable code so the UI branches on meaning rather than parsing English:</p>
+            <pre><code>{ "error": {
+    "message": "The vote is tied. Choose one of the tied destinations to break it.",
+    "code": "TIE",
+    "details": { "leaders": ["…", "…"], "votes": 2 } } }</code></pre>
+            <p>The codes in use: <code>VALIDATION_ERROR</code>, <code>ALREADY_MEMBER</code>, <code>DUPLICATE_VOTE</code>, <code>TRIP_FINALIZED</code>, <code>NO_VOTES</code>, <code>TIE</code>, <code>DUPLICATE</code>. Concrete payoff: on <code>ALREADY_MEMBER</code> the join dialog navigates you into the group instead of showing a dead-end error.</p>
+            <div class="where"><span>Where</span><code>server/src/utils/ApiError.js</code><code>client/src/api/client.js</code> → <code>parseApiError</code></div>
+          </div>
+        </details>
+
+        <details class="q">
+          <summary><b>Q</b> Where do you validate input?</summary>
+          <div class="a">
+            <p>Three layers, deliberately: <strong>client</strong> mirrors the rules for instant feedback (never trusted); <strong>express-validator</strong> in the route file rejects malformed input before any logic runs; <strong>Mongoose schema</strong> constraints are the last line at the database boundary. The error handler maps a Mongoose <code>ValidationError</code> into the same 400 shape as express-validator, so the client sees one format either way.</p>
+            <div class="where"><span>Where</span><code>server/src/routes/groupRoutes.js</code><code>server/src/middleware/validate.js</code></div>
+          </div>
+        </details>
+
+        <details class="q">
+          <summary><b>Q</b> Talk me through your rate limiting.</summary>
+          <div class="a">
+            <ul>
+              <li><strong>300/min globally</strong> — a blanket safety net (<code>app.js</code>).</li>
+              <li><strong>60/min on <code>/api/places</code></strong> — Google bills per call, so this is a cost control as much as a security one.</li>
+              <li><strong>20 per 15 min on auth in production</strong> (looser in development, so seeding and manual testing don’t trip it) — this is the anti-credential-stuffing one.</li>
+            </ul>
+            <p>Note <code>app.set('trust proxy', 1)</code> — behind a reverse proxy the limiter must read the forwarded IP or it throttles everyone as one client.</p>
+            <div class="where"><span>Where</span><code>server/src/app.js</code><code>server/src/routes/authRoutes.js</code></div>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section id="s12">
+      <p class="sec-no">12</p>
+      <h3>Database</h3>
+
+      <div class="qa">
+        <details class="q">
+          <summary><b>Q</b> Why are itinerary activities embedded but votes a separate collection?</summary>
+          <div class="a">
+            <p>This is the classic Mongo modelling question — answer with the access pattern:</p>
+            <ul>
+              <li><strong>Embedded</strong> (planned activities inside a suggestion, members inside a group): always read together with the parent, bounded in size, never queried on their own. Embedding makes the workspace load one query instead of three.</li>
+              <li><strong>Referenced</strong> (votes): I need to aggregate across them, count them per suggestion, and — crucially — enforce a <em>unique constraint</em> on (group, user). You cannot put a unique index on a field inside an array element in the way I need. The constraint drove the collection.</li>
+            </ul>
+            <div class="where"><span>Where</span><code>server/src/models/Suggestion.js</code><code>server/src/models/Vote.js</code></div>
+          </div>
+        </details>
+
+        <details class="q">
+          <summary><b>Q</b> How do you count the votes?</summary>
+          <div class="a">
+            <p>An aggregation, not a JavaScript loop — the counting happens in the database:</p>
+            <pre><code>Vote.aggregate([
+  { $match: { group: groupId } },
+  { $group: { _id: '$suggestion', count: { $sum: 1 } } },
+])</code></pre>
+            <p>From that one pass the service derives the per-suggestion counts, the total, the top count, the list of leaders and the <code>isTie</code> flag. Everything about the vote state comes from a single round trip.</p>
+            <div class="where"><span>Where</span><code>server/src/services/votingService.js</code> → <code>tallyGroupVotes</code></div>
+          </div>
+        </details>
+
+        <details class="q">
+          <summary><b>Q</b> What happens to suggestions and votes when a group is deleted?</summary>
+          <div class="a">
+            <p>MongoDB has no foreign keys, so the cascade is explicit in <code>deleteGroup</code>: suggestions, votes and activity entries for that group are removed, then the group itself. The same care applies elsewhere — removing a member or deleting a suggestion also deletes the affected votes, otherwise the tally would count ballots from people who left.</p>
+            <p><strong>Be honest about the gap:</strong> those deletes are not in a transaction. If the process died mid-cascade you could orphan documents. With a replica set I’d wrap it in a Mongo session; on a standalone dev server transactions aren’t available. I verified the cascade leaves nothing behind by querying the collections directly after the test run.</p>
+            <div class="where"><span>Where</span><code>server/src/controllers/groupController.js</code> → <code>deleteGroup</code></div>
+          </div>
+        </details>
+
+        <details class="q">
+          <summary><b>Q</b> How do the invite codes work? Could two groups get the same one?</summary>
+          <div class="a">
+            <p>Six characters from a 32-character alphabet that deliberately excludes <code>0/O</code> and <code>1/I</code>, so a code can be read aloud without confusion. That is <strong>32⁶ ≈ 1.07 billion</strong> combinations, drawn from <code>crypto.randomBytes</code> rather than <code>Math.random</code>.</p>
+            <p>Collisions are impossible to persist because <code>inviteCode</code> carries a unique index — and creation retries up to five times on an <code>E11000</code>, so the rare collision is invisible to the user rather than a 500.</p>
+            <div class="where"><span>Where</span><code>server/src/utils/inviteCode.js</code><code>server/src/controllers/groupController.js</code></div>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section id="s13">
+      <p class="sec-no">13</p>
+      <h3>Security</h3>
+
+      <div class="qa">
+        <details class="q">
+          <summary><b>Q</b> How are passwords stored?</summary>
+          <div class="a">
+            <p>bcrypt with a cost factor of 12, hashed in a Mongoose <code>pre('save')</code> hook so no controller can ever write a plaintext password by accident. The field is declared <code>select: false</code>, so it is excluded from query results by default — login has to ask for it explicitly with <code>.select('+password')</code>.</p>
+            <p>If asked why bcrypt and not SHA-256: “SHA is fast, which is exactly wrong for passwords. bcrypt is deliberately slow and salted per user, so identical passwords produce different hashes and brute-forcing is expensive. Cost 12 is roughly a quarter-second per hash.”</p>
+            <div class="where"><span>Where</span><code>server/src/models/User.js</code></div>
+          </div>
+        </details>
+
+        <details class="q">
+          <summary><b>Q</b> Why does a wrong email and a wrong password return the same message?</summary>
+          <div class="a">
+            <p>Because different messages turn the login form into an account-enumeration oracle: an attacker could discover which email addresses are registered. Both cases return 401 “Incorrect email or password”. There is a test asserting exactly that string, so a well-meaning future change can’t quietly reintroduce the leak.</p>
+            <div class="where"><span>Where</span><code>server/src/controllers/authController.js</code> → <code>login</code></div>
+          </div>
+        </details>
+
+        <details class="q">
+          <summary><b>Q</b> Where do you store the JWT, and what’s the trade-off?</summary>
+          <div class="a">
+            <p>In <code>localStorage</code>, attached by the Axios interceptor. State the trade-off yourself before they do: <strong>localStorage is readable by any script on the page, so it is vulnerable to XSS</strong>; an httpOnly cookie would be immune to that but needs CSRF protection and complicates cross-origin dev. For this project I chose the simpler model and mitigated the input side (validation everywhere, React escaping output by default, helmet headers).</p>
+            <p>Also worth volunteering: <code>requireAuth</code> re-loads the user from the database on every request rather than trusting the token payload — so a deleted account’s token stops working immediately instead of staying valid until expiry.</p>
+            <div class="where"><span>Where</span><code>server/src/middleware/auth.js</code><code>client/src/api/client.js</code></div>
+          </div>
+        </details>
+
+        <details class="q">
+          <summary><b>Q</b> Someone who isn’t in a group requests it. What do they get, and why?</summary>
+          <div class="a">
+            <p><strong>404, not 403.</strong> A 403 would confirm the group exists, which leaks information — someone could probe IDs and learn which trips are real. The middleware treats “not a member” and “does not exist” identically.</p>
+            <p>The authorisation itself is entirely server-side. Hiding a button in the UI is a courtesy; the API rejects the call regardless, and there are tests that call every organiser-only endpoint as a plain member and assert 403, and as an outsider and assert 404.</p>
+            <div class="where"><span>Where</span><code>server/src/middleware/groupAccess.js</code></div>
+          </div>
+        </details>
+
+        <details class="q">
+          <summary><b>Q</b> How do you protect the Google API key?</summary>
+          <div class="a">
+            <p>It never reaches the browser. The client calls <code>/api/places/search</code> on my own server; the server calls Google with the key in a header. Photos are the interesting case — Google serves them from a URL that needs the key, so rather than hand that URL to the browser, the server streams the image back through <code>/api/places/photo?ref=…</code>.</p>
+            <p>That proxy is the one unauthenticated route, because <code>&lt;img&gt;</code> cannot send a bearer token. It is protected by a strict regex on the photo reference plus the rate limiter. Say that out loud — an interviewer who spots the public route will be impressed you already know why.</p>
+            <div class="where"><span>Where</span><code>server/src/services/placesService.js</code><code>server/src/routes/placesRoutes.js</code></div>
+          </div>
+        </details>
+
+        <details class="q">
+          <summary><b>Q</b> What else did you harden?</summary>
+          <div class="a">
+            <ul>
+              <li><code>helmet</code> for security headers.</li>
+              <li>CORS restricted to an explicit allow-list from <code>CLIENT_ORIGIN</code>, not <code>*</code>.</li>
+              <li>JSON body capped at 100&nbsp;kb.</li>
+              <li>Secrets only in <code>.env</code>, which is gitignored; <code>.env.example</code> documents every variable with no real values.</li>
+              <li>The server <strong>exits at boot</strong> if <code>MONGO_URI</code> or <code>JWT_SECRET</code> is missing — no silently defaulted signing secret.</li>
+              <li>The Mongo duplicate-key number (11000) is mapped to a friendly <code>DUPLICATE</code> code so raw driver internals aren’t echoed to clients.</li>
+            </ul>
+            <div class="where"><span>Where</span><code>server/src/config/env.js</code><code>server/src/app.js</code></div>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section id="s14">
+      <p class="sec-no">14</p>
+      <h3>The hard problems — your best material</h3>
+      <p>
+        These are the stories that make you sound like an engineer rather than someone who followed a
+        tutorial. Have all four ready.
+      </p>
+
+      <div class="qa">
+        <details class="q">
+          <summary><b>Q</b> How do you stop someone voting twice?</summary>
+          <div class="a">
+            <p>Two layers, and the second is the one that matters:</p>
+            <ul>
+              <li><strong>Application check</strong> — the controller looks for an existing vote and returns <code>409 DUPLICATE_VOTE</code> if you’re re-voting for the same destination. This exists for the error message, not for safety.</li>
+              <li><strong>Database constraint</strong> — a unique index on <code>{ group, user }</code>. Two requests firing at the same millisecond both pass the check, but only one insert can succeed; the other raises <code>E11000</code>, which is caught and converted into a vote move.</li>
+            </ul>
+            <p>The line to say: <em>“A check-then-write is a race condition unless the database enforces the invariant. The index is the real guarantee; the check is just for a nicer message.”</em></p>
+            <div class="where"><span>Where</span><code>server/src/models/Vote.js</code><code>server/src/controllers/voteController.js</code></div>
+          </div>
+        </details>
+
+        <details class="q">
+          <summary><b>Q</b> Tell me about a bug you found and fixed.</summary>
+          <div class="a">
+            <p>The strongest story in the project — a silent library-version bug:</p>
+            <ul>
+              <li><strong>Symptom:</strong> while testing the currency feature, sending <code>currency: ''</code> was rejected, but <code>currency: null</code> was <em>accepted</em> and stored as null.</li>
+              <li><strong>Investigation:</strong> I had written <code>optional({ nullable: true, checkFalsy: true })</code>. I reproduced it in an isolated 20-line Express app and found express-validator v7 had replaced those flags with <code>optional({ values: 'falsy' })</code> — the old options are accepted and <strong>silently ignored</strong>. No warning, no error.</li>
+              <li><strong>Blast radius:</strong> the same stale option was on every optional date field — which meant <em>clearing the trip dates in settings was broken</em>, because the UI sends <code>null</code> and validation rejected it. A real user-facing bug I hadn’t noticed.</li>
+              <li><strong>Second cause:</strong> the null was slipping past Mongoose too, because enum validators skip null, and a destructuring default only fires on <code>undefined</code>.</li>
+              <li><strong>Fix:</strong> corrected the option across all rules, and normalised falsy currency to the default in the controller so the invariant holds no matter what the client sends.</li>
+              <li><strong>Prevention:</strong> I also found that <code>.map(rule =&gt; rule.optional())</code> on the PATCH routes was <em>resetting</em> those options, so I rebuilt the rules through a factory function that takes a <code>partial</code> flag. Then I wrote regression tests for clearing dates with both <code>null</code> and <code>''</code>.</li>
+            </ul>
+            <p>That answer demonstrates reproduction, root-cause analysis, blast-radius thinking and prevention — which is exactly the loop interviewers are testing for.</p>
+            <div class="where"><span>Where</span><code>server/src/routes/groupRoutes.js</code> → <code>groupBodyRules()</code></div>
+          </div>
+        </details>
+
+        <details class="q">
+          <summary><b>Q</b> Why doesn’t your app convert currencies?</summary>
+          <div class="a">
+            <p>Because a shared budget only works if everyone reads the same number. The currency belongs to the trip, not the member: the organiser picks one of 39 supported codes and every amount in that trip is formatted with it. A per-member display currency would need a live exchange-rate feed, and rates that drift would mean two members seeing different “over budget” verdicts on the same suggestion.</p>
+            <p>Two details worth adding: the picker defaults to the currency implied by the browser’s locale (an <code>en-IN</code> browser gets INR rather than dollars), and if the organiser changes it later the settings dialog explicitly warns that amounts are <em>relabelled, not converted</em> — because pretending otherwise would silently corrupt the numbers.</p>
+            <div class="where"><span>Where</span><code>server/src/utils/currencies.js</code><code>client/src/utils/currencies.js</code></div>
+          </div>
+        </details>
+
+        <details class="q">
+          <summary><b>Q</b> What happens if the Google Places API is down or you have no key?</summary>
+          <div class="a">
+            <p>Failures are translated rather than leaked: a 401/403 from Google becomes “check the API key and that Places API (New) is enabled”, a 429 becomes a rate-limit message, anything else a generic 502. The raw Google error is logged server-side but never forwarded to the browser.</p>
+            <p>With no key configured at all, search falls back to a built-in catalogue of twelve destinations and marks the response <code>source: "fallback"</code>, which the UI surfaces as a small amber note. That was a deliberate choice so the project stays fully runnable for a reviewer without a billing-enabled Google account.</p>
+            <div class="where"><span>Where</span><code>server/src/services/placesService.js</code></div>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section id="s15">
+      <p class="sec-no">15</p>
+      <h3>Performance &amp; scale</h3>
+
+      <div class="qa">
+        <details class="q">
+          <summary><b>Q</b> Loading a workspace shows a group, members, suggestions and a tally. How many queries is that?</summary>
+          <div class="a">
+            <p>Not one per suggestion — that would be the N+1 trap. The workspace endpoint runs the independent reads concurrently with <code>Promise.all</code>: the suggestions (with authors populated in the same round trip), the vote aggregation, the caller’s own vote, and the list of who has voted. Members come back on the group document itself because they are embedded.</p>
+            <div class="where"><span>Where</span><code>server/src/controllers/groupController.js</code> → <code>getGroup</code></div>
+          </div>
+        </details>
+
+        <details class="q">
+          <summary><b>Q</b> How would you scale this to 100,000 users?</summary>
+          <div class="a">
+            <p>Answer in order of what actually binds first:</p>
+            <ul>
+              <li><strong>Stateless already</strong> — the JWT means no server-side sessions, so I can run N Express instances behind a load balancer today.</li>
+              <li><strong>Move the rate-limit store to Redis</strong> — the in-memory limiter is per-process, so with 4 instances the effective limit is 4×. This breaks first and is easy to miss.</li>
+              <li><strong>Cache Places results in Redis</strong> — searches repeat heavily (“Goa”, “Bali”) and Google bills per call. A short TTL cuts both latency and cost.</li>
+              <li><strong>Replica set + read preference</strong> for the read-heavy workspace endpoint, which also unlocks real transactions for the cascade deletes.</li>
+              <li><strong>Websockets</strong> for live vote updates instead of refetching.</li>
+              <li>Sharding only if a single group ever got enormous — realistically groups are tens of people, so the data per group stays tiny. Say this: it shows you size the problem instead of reciting buzzwords.</li>
+            </ul>
+          </div>
+        </details>
+
+        <details class="q">
+          <summary><b>Q</b> Why isn’t the app real-time?</summary>
+          <div class="a">
+            <p>Be direct: it isn’t, and I know it. Your own actions refresh immediately; another member’s vote appears on your next load. For a planning tool where decisions take days, polling or a refresh was acceptable, and websockets would have added infrastructure the MVP didn’t need. The upgrade path is clean, though — every mutation already writes an activity entry, so a Socket.io room per group could broadcast those same events with no data-model change.</p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section id="s16">
+      <p class="sec-no">16</p>
+      <h3>Testing &amp; debugging</h3>
+
+      <div class="qa">
+        <details class="q">
+          <summary><b>Q</b> How did you test this?</summary>
+          <div class="a">
+            <p>End-to-end against a live server and a real MongoDB, not mocks — <strong>118 assertions</strong> in total (93 in the main suite, 25 more for currency and the validation regressions). They cover registration and login, token rejection, invite codes, member vs organiser vs outsider authorisation, suggestions, itinerary activities, voting, duplicate rejection, vote moving, tie detection, tie-breaking, finalisation, reopening, the activity feed, membership changes and cascade deletion.</p>
+            <p>I also verified database integrity directly — no orphaned documents after the cascade tests, every password bcrypt-hashed, and the unique indexes actually present — and drove the main user journeys in a real browser.</p>
+            <p><strong>Own the gap:</strong> “These are integration tests. There are no unit tests, and no CI. If I continued, I’d put Jest + Supertest around <code>votingService</code> first, because the tally and tie logic is the part where a subtle regression would be hardest to spot by eye.”</p>
+          </div>
+        </details>
+
+        <details class="q">
+          <summary><b>Q</b> A user says “I voted but the count didn’t change.” How do you debug it?</summary>
+          <div class="a">
+            <p>Narrate a path, don’t guess a cause — work along the request:</p>
+            <ul>
+              <li><strong>Network tab</strong> — did the POST fire, and what status? A 409 with <code>DUPLICATE_VOTE</code> or <code>TRIP_FINALIZED</code> answers it immediately.</li>
+              <li><strong>If 2xx</strong> — check the response body’s <code>voting.counts</code>. If the server counted it, the bug is client-side: the refresh didn’t run or state didn’t re-render.</li>
+              <li><strong>If the count is wrong server-side</strong> — query the votes collection directly for that group and user. Is there a vote row? Does it point at the expected suggestion?</li>
+              <li><strong>If the row is right but the tally is wrong</strong> — the bug is in the aggregation’s <code>$match</code>, most likely an ObjectId-vs-string mismatch, which is the classic Mongo aggregation trap.</li>
+            </ul>
+            <p>Ending on a named likely culprit is what makes this answer land.</p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section id="s17">
+      <p class="sec-no">17</p>
+      <h3>Curveballs</h3>
+
+      <div class="qa">
+        <details class="q">
+          <summary><b>Q</b> What would you do differently if you started again?</summary>
+          <div class="a">
+            <ul>
+              <li><strong>Write tests alongside the code.</strong> I tested thoroughly, but at the end. The express-validator bug had been sitting there silently the whole time and a test written on day one would have caught it immediately.</li>
+              <li><strong>Consider Postgres.</strong> Votes and memberships are relational, and I’d get transactions and real foreign keys instead of hand-written cascades.</li>
+              <li><strong>Pick the token storage more deliberately</strong> — httpOnly cookies with CSRF protection is the better default.</li>
+            </ul>
+          </div>
+        </details>
+
+        <details class="q">
+          <summary><b>Q</b> What’s the weakest part of your code?</summary>
+          <div class="a">
+            <p>Never say “nothing”. Say: “The cascade deletes aren’t transactional, so a crash mid-delete could orphan documents. It’s the one place where a failure leaves the database inconsistent, and it’s the first thing I’d fix with a replica set and a Mongo session.” A specific, correct weakness with a named fix reads as self-awareness.</p>
+          </div>
+        </details>
+
+        <details class="q">
+          <summary><b>Q</b> Two organisers finalise at the same instant. What happens?</summary>
+          <div class="a">
+            <p>Reason it through out loud rather than bluffing: there is one organiser per group, so this needs the same person in two tabs. Both requests would read <code>status: 'planning'</code> and both could write. The second write wins and the feed would show two finalisation entries.</p>
+            <p>Then give the fix: a conditional update — <code>findOneAndUpdate({ _id, status: 'planning' }, { status: 'finalized' })</code> — so the status change is atomic and the loser gets the “already finalised” 409 that already exists for the sequential case. Recognising a real race you didn’t handle, and knowing the one-line fix, scores better than claiming it can’t happen.</p>
+          </div>
+        </details>
+
+        <details class="q">
+          <summary><b>Q</b> How much of this did you write yourself?</summary>
+          <div class="a">
+            <p>Answer honestly — and note that the defence against this question is simply knowing your own codebase. Everything in this guide is checkable in the repo; the fastest way to prove ownership is to open <code>voteController.js</code> and walk them through the duplicate-vote race live, then show the unique index in <code>Vote.js</code> that makes it safe. Depth of explanation is the proof, not the claim.</p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <!-- ================= PART III ================= -->
+    <div class="part">
+      <p class="eyebrow">Part III</p>
+      <h2>One-page cheat sheet</h2>
+      <p>Read this on the way in.</p>
+    </div>
+
+    <section id="s18">
+      <p class="sec-no">18</p>
+      <h3>Numbers, names and one-liners</h3>
+
+      <div class="grid2">
+        <div class="card">
+          <h5>Numbers to know</h5>
+          <ul>
+            <li>bcrypt cost <strong>12</strong>, JWT expiry <strong>7d</strong></li>
+            <li>Invite code: <strong>6 chars</strong>, 32-char alphabet, <strong>32⁶ ≈ 1.07 B</strong></li>
+            <li><strong>5</strong> collections · <strong>27</strong> endpoints · <strong>4</strong> unique constraints</li>
+            <li>Rate limits: <strong>300</strong>/min global, <strong>60</strong>/min places, <strong>20</strong>/15min auth</li>
+            <li><strong>39</strong> currencies · <strong>118</strong> test assertions</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h5>Error codes</h5>
+          <ul>
+            <li><code>VALIDATION_ERROR</code> — 400 + per-field details</li>
+            <li><code>ALREADY_MEMBER</code> — 409, UI redirects in</li>
+            <li><code>DUPLICATE_VOTE</code> — 409, same destination twice</li>
+            <li><code>TRIP_FINALIZED</code> — 409, voting closed</li>
+            <li><code>TIE</code> — 409 + tied leaders</li>
+            <li><code>NO_VOTES</code> — 400, nobody voted yet</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h5>Files they’ll ask you to open</h5>
+          <ul>
+            <li><code>server/src/controllers/voteController.js</code></li>
+            <li><code>server/src/models/Vote.js</code></li>
+            <li><code>server/src/middleware/groupAccess.js</code></li>
+            <li><code>server/src/services/votingService.js</code></li>
+            <li><code>client/src/context/AuthContext.jsx</code></li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h5>Sentences that land</h5>
+          <ul>
+            <li>“A check-then-write is a race unless the database enforces the invariant.”</li>
+            <li>“Non-members get 404, not 403 — a 403 confirms the group exists.”</li>
+            <li>“The software never invents a decision the group didn’t make.”</li>
+            <li>“Hiding a button is a courtesy; the API rejects it regardless.”</li>
+            <li>“The constraint drove the collection.”</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h5>Layering, in one breath</h5>
+          <p>Routes validate → middleware authorises → controllers orchestrate → services hold logic → presenters shape JSON.</p>
+        </div>
+
+        <div class="card">
+          <h5>If you blank</h5>
+          <p>Fall back to tracing one request end to end. It buys thinking time and shows you understand the whole stack, whatever the original question was.</p>
+        </div>
+      </div>
+
+      <div class="note warn">
+        <h5>Last thing</h5>
+        <p>
+          Before the interview, run the app and click through once: register, create a trip, suggest
+          a place, vote, force a tie, finalise, watch the countdown. Talking about software you used
+          an hour ago sounds completely different from talking about software you last saw a month
+          ago.
+        </p>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<footer>
+  TripLane — collaborative group trip planner · MERN + Tailwind CSS. Every path in this guide points
+  at a real file in the repository.
+</footer>
