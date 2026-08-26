@@ -5,23 +5,37 @@ import { createPortal } from 'react-dom';
 export default function Modal({ open, onClose, title, description, children, size = 'md' }) {
   const panelRef = useRef(null);
 
+  // Callers pass an inline arrow, so `onClose` is a new function on every render.
+  // Keeping it in a ref lets the effect below depend on `open` alone — otherwise it
+  // re-ran on every keystroke and pulled focus out of whatever field was being typed in.
+  const onCloseRef = useRef(onClose);
+  useEffect(() => {
+    onCloseRef.current = onClose;
+  });
+
   useEffect(() => {
     if (!open) return undefined;
 
     const onKeyDown = (event) => {
-      if (event.key === 'Escape') onClose();
+      if (event.key === 'Escape') onCloseRef.current();
     };
     document.addEventListener('keydown', onKeyDown);
 
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
-    panelRef.current?.focus();
+
+    // Land the cursor in the first field so the dialog is usable straight away,
+    // falling back to the panel itself for dialogs that have no inputs.
+    const firstField = panelRef.current?.querySelector(
+      'input:not([type="hidden"]), textarea, select'
+    );
+    (firstField || panelRef.current)?.focus();
 
     return () => {
       document.removeEventListener('keydown', onKeyDown);
       document.body.style.overflow = previousOverflow;
     };
-  }, [open, onClose]);
+  }, [open]);
 
   if (!open) return null;
 
